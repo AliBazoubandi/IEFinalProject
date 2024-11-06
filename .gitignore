@@ -1,0 +1,40 @@
+# Node.js dependencies
+/backEnd/node_modules/
+frontEnd/node_modules/
+
+# Environment variables file
+/backEnd/.env
+
+# Logs
+/logs
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# IDE/Editor folders (e.g., VSCode, IntelliJ)
+.vscode/
+.idea/
+
+# Build directories (front-end build)
+frontEnd/build/
+
+# NPM debug files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.swp
+*.swo
+
+# Miscellaneous system files
+*.bak
+*.tmp
+
+# Frontend build folders (for React)
+frontEnd/.env
+
+# Coverage reports
+/coverage/
