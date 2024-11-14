@@ -3,9 +3,9 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 const authenticateUser = require("../middleware/authenticateUser");
 
-router.post("/signUp", userController.signUp);
-router.post("/signIn", userController.signIn);
-router.post("/logOut", authenticateUser, userController.logOutUser);
+router.post("/signup", userController.signUp);
+router.post("/signin", userController.signIn);
+router.post("/logout", authenticateUser, userController.logOutUser);
 router.patch(
   "/profile/username",
   authenticateUser,
