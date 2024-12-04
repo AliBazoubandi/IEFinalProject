@@ -35,7 +35,7 @@ const resourceController = {
   },
 
   // Get all resources of a specific type
-  getAllResources: async (req, res) => {
+  getAllResourcesOfSpecificType: async (req, res) => {
     const { resourceType } = req.params; // Extract resource type from route parameter
     const Model = resourceModels[resourceType]; // Get the corresponding model
 
@@ -46,6 +46,31 @@ const resourceController = {
     try {
       const resources = await Model.find(); // Retrieve all resources of this type
       res.json(resources);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
+
+  // resourceController.js
+  getAllResources: async (req, res) => {
+    try {
+      const classrooms = await Classroom.find();
+      const lockers = await Locker.find();
+      const amphitheaters = await Amphitheater.find();
+      const laptops = await Laptop.find();
+      const laboratories = await Laboratory.find();
+
+      // Combine all resources into one array
+      const allResources = [
+        ...classrooms,
+        ...lockers,
+        ...amphitheaters,
+        ...laptops,
+        ...laboratories,
+      ];
+
+      res.json(allResources);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });

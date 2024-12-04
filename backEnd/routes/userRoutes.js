@@ -6,6 +6,8 @@ const authenticateUser = require("../middleware/authenticateUser");
 router.post("/signup", userController.signUp);
 router.post("/signin", userController.signIn);
 router.post("/logout", authenticateUser, userController.logOutUser);
+router.get("/users", userController.getAllUsers);
+router.get("/users/:userId", userController.getUserById);
 router.patch(
   "/profile/username",
   authenticateUser,

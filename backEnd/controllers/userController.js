@@ -58,6 +58,38 @@ const userController = {
     res.json({ message: "Logout successful!" });
   },
 
+  getAllUsers: async (req, res) => {
+    try {
+      const users = await User.find();
+      if (!users) {
+        return res.status(404).json({ error: "Currently no user in the system" });
+      }
+      res.json({ message: "Reading all users in the system", users});
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
+
+  getUserById: async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const userWithoutPassword = { ...user.toObject(), password: undefined };
+
+      res.json(userWithoutPassword);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
+
   updateUsername: async (req, res) => {
     const userId = req.user._id;
     const { newUsername } = req.body;
