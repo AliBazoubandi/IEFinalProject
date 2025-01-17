@@ -15,10 +15,11 @@ import {
 } from "./ResourceDetail/style";
 
 const ResourceDetail = () => {
-  const { resourceType } = useParams();
-  const [resourceDetails, setResourceDetails] = useState([]);
-  const [error, setError] = useState(null);
+  const { resourceType } = useParams(); // Get resource type from URL
+  const [resourceDetails, setResourceDetails] = useState([]); // Store resource details
+  const [error, setError] = useState(null); // Store error messages
 
+  // Fetch resource details from the backend
   useEffect(() => {
     const fetchResourceDetails = async () => {
       try {
@@ -34,6 +35,29 @@ const ResourceDetail = () => {
     fetchResourceDetails();
   }, [resourceType]);
 
+  // Handle reserve button click
+  const handleReserve = async (resourceId) => {
+    // Update the resource status locally for immediate UI feedback
+    const updatedResources = resourceDetails.map((resource) =>
+      resource._id === resourceId
+        ? { ...resource, status: "in use" }
+        : resource
+    );
+    setResourceDetails(updatedResources);
+
+    try {
+      // Send the updated status to the backend
+      await axios.put(
+        `http://localhost:5000/api/resources/${resourceType}/${resourceId}`,
+        { status: "in use" }
+      );
+    } catch (err) {
+      console.error("Error updating resource status:", err);
+      setError("Failed to reserve resource. Please try again.");
+    }
+  };
+
+  // Render error message if any
   if (error) {
     return (
       <DetailContainer>
@@ -44,13 +68,15 @@ const ResourceDetail = () => {
 
   return (
     <DetailContainer>
-      <DetailTitle>{resourceType.charAt(0).toUpperCase() + resourceType.slice(1)} Details</DetailTitle>
+      <DetailTitle>
+        {resourceType.charAt(0).toUpperCase() + resourceType.slice(1)} Details
+      </DetailTitle>
       {resourceDetails.length > 0 ? (
         <TableWrapper>
           <ResourceTable>
             <thead>
               <TableRow>
-                {/* Dynamically render column headers */}
+                {/* Render column headers dynamically */}
                 {Object.keys(resourceDetails[0]).map(
                   (key) =>
                     key !== "_id" &&
@@ -65,7 +91,7 @@ const ResourceDetail = () => {
               </TableRow>
             </thead>
             <tbody>
-              {/* Render table rows for each instance */}
+              {/* Render table rows dynamically */}
               {resourceDetails.map((resource, index) => (
                 <TableRow key={index}>
                   {Object.keys(resource).map(
@@ -80,8 +106,10 @@ const ResourceDetail = () => {
                     <ReserveButton
                       available={resource.status === "available"}
                       onClick={() =>
-                        alert(`Reserving ${resource.name || resourceType}`)
+                        resource.status === "available" &&
+                        handleReserve(resource._id)
                       }
+                      disabled={resource.status !== "available"}
                     >
                       {resource.status === "available"
                         ? "Reserve"

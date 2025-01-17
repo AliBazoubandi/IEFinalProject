@@ -92,3 +92,12 @@ export const Property = styled.div`
     color: #007bff;
   }
 `;
+
+// Image for the resource card
+export const ResourceImage = styled.img`
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+  margin-bottom: 15px;
+`;
